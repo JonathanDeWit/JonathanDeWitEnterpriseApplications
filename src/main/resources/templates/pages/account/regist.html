@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html layout:decorate="layouts/main_layout" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+
+<div layout:fragment="content">
+
+
+
+  <div class="container mt-5">
+    <h2 th:text="#{registration}"></h2>
+    <form>
+      <div class="form-group">
+        <label for="firstName" th:placeholder="#{firstname}"></label>
+        <input type="text" class="form-control" id="firstName" th:placeholder="#{suggest_firstname}" required>
+      </div>
+      <div class="form-group">
+        <label for="lastName" th:placeholder="#{lastname}"></label>
+        <input type="text" class="form-control" id="lastName" th:placeholder="#{suggest_lastname}" required>
+      </div>
+      <div class="form-group">
+        <label for="email" th:placeholder="#{email_address}"></label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" th:placeholder="#{suggest_email}" required>
+      </div>
+      <div class="form-group">
+        <label for="password" th:placeholder="#{password}"></label>
+        <input type="password" class="form-control" id="password" th:placeholder="#{suggest_password}" required>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword" th:placeholder="#{confirm_password}"></label>
+        <input type="password" class="form-control" id="confirmPassword" th:placeholder="#{suggest_confirm_password}" required>
+      </div>
+      <button type="submit" class="btn btn-primary" th:text="#{submit}"></button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

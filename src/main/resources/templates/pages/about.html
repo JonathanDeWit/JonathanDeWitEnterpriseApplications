@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html layout:decorate="layouts/main_layout" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+
+<div layout:fragment="content">
+    <div class="container mt-5">
+
+        <!-- Title -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 th:text="#{welcome_to} + ' VentiStore!'"></h1>
+                <p th:text="#{slogan}"></p>
+            </div>
+        </div>
+
+        <!-- Our Journey Section -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <img th:src="@{/img/fans_store.jpeg}" class="img-fluid" alt="Image depicting the journey of Fanatics Haven">
+            </div>
+            <div class="col-md-6">
+                <h2 th:text="#{our_journey}"></h2>
+                <p th:text="#{journey_info}"></p>
+            </div>
+        </div>
+
+        <!-- Commitment Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2 th:text="#{our_commitment}"></h2>
+                <p th:text="#{commitment_info}"></p>
+                <ul>
+                    <li th:text="#{commitment_quality}"></li>
+                    <li th:text="#{commitment_diversity}"></li>
+                    <li th:text="#{commitment_customer}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Sustainability Section -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h2 th:text="#{sustainability}"></h2>
+                <p th:text="#{sustainability_info}"></p>
+            </div>
+            <div class="col-md-6">
+                <img th:src="@{/img/sustainable_fan.png}" class="img-fluid" alt="Image symbolizing sustainability">
+            </div>
+        </div>
+
+        <!-- Connect Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2 th:text="#{connect_with_us}"></h2>
+                <p th:text="#{connect_with_us_info}"></p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <p th:text="#{footer}"></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
