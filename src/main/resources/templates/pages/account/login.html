@@ -11,7 +11,7 @@
               <span th:text="#{create_account_sugestion} + ' '"></span>
               <a th:text="#{here}" th:href="@{/account/regist}"></a>
             </p>
-            <form id="login">
+            <form action="/account/perform_login" method="post" id="login">
               <div class="form-group">
                 <label for="username" th:text="#{username}"></label>
                 <input type="text" class="form-control" id="username" name="username" th:placeholder="#{suggest_name}">

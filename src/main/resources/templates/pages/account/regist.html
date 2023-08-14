@@ -8,26 +8,26 @@
 
   <div class="container mt-5">
     <h2 th:text="#{registration}"></h2>
-    <form>
+    <form th:action="@{/account/regist}" method="post" th:object="${userDetail}">
       <div class="form-group">
-        <label for="firstName" th:placeholder="#{firstname}"></label>
-        <input type="text" class="form-control" id="firstName" th:placeholder="#{suggest_firstname}" required>
+        <label for="firstname" th:placeholder="#{firstname}"></label>
+        <input type="text" class="form-control" th:field="*{firstname}" id="firstname" name="firstname" th:placeholder="#{suggest_firstname}" required>
       </div>
       <div class="form-group">
-        <label for="lastName" th:placeholder="#{lastname}"></label>
-        <input type="text" class="form-control" id="lastName" th:placeholder="#{suggest_lastname}" required>
+        <label for="lastname" th:placeholder="#{lastname}"></label>
+        <input type="text" class="form-control" th:field="*{lastname}" id="lastname" name="lastname" th:placeholder="#{suggest_lastname}" required>
       </div>
       <div class="form-group">
         <label for="email" th:placeholder="#{email_address}"></label>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" th:placeholder="#{suggest_email}" required>
+        <input type="email" class="form-control" th:field="*{email}" id="email" name="email" aria-describedby="emailHelp" th:placeholder="#{suggest_email}" required>
       </div>
       <div class="form-group">
         <label for="password" th:placeholder="#{password}"></label>
-        <input type="password" class="form-control" id="password" th:placeholder="#{suggest_password}" required>
+        <input type="password" class="form-control" th:field="*{password}" id="password" name="password" th:placeholder="#{suggest_password}" required>
       </div>
       <div class="form-group">
         <label for="confirmPassword" th:placeholder="#{confirm_password}"></label>
-        <input type="password" class="form-control" id="confirmPassword" th:placeholder="#{suggest_confirm_password}" required>
+        <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirmPassword" name="confirmPassword" th:placeholder="#{suggest_confirm_password}" required>
       </div>
       <button type="submit" class="btn btn-primary" th:text="#{submit}"></button>
     </form>
