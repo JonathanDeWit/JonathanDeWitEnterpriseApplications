@@ -1,14 +1,12 @@
 package com.example.jonathandewitenterpriseapplications.service;
 
 import com.example.jonathandewitenterpriseapplications.models.*;
-import com.example.jonathandewitenterpriseapplications.repository.IAuthorityRepository;
-import com.example.jonathandewitenterpriseapplications.repository.IUserDetailRepository;
-import com.example.jonathandewitenterpriseapplications.repository.IUserRepository;
-import com.example.jonathandewitenterpriseapplications.repository.IVerificationTokenRepository;
+import com.example.jonathandewitenterpriseapplications.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,10 +19,13 @@ public class AccountService implements IAccountService {
     private IUserRepository userRepository;
 
     @Autowired
+    private IAuthorityRepository authorityRepository;
+
+    @Autowired
     private IUserDetailRepository userDetailRepository;
 
     @Autowired
-    private IAuthorityRepository authorityRepository;
+    private IPersistentLoginRepository persistentLoginRepository;
 
     @Autowired
     private IVerificationTokenRepository verificationTokenRepository;
@@ -55,17 +56,9 @@ public class AccountService implements IAccountService {
         if(verificationToken.getExpiryDate().after(new Date())) {
             //move from account table to userdetails table
             UserDetail userDetail = userDetailRepository.findByUsername(verificationToken.getUsername());
-            //create user details
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-            SecurityUser userDetails = new SecurityUser(userDetail.getUsername(),
-                    userDetail.getPassword(),
-                            authorities);
 
             User user = new User(userDetail.getUsername(), userDetail.getPassword(), true);
             Authority authority = new Authority("ROLE_USER", user);
-
 
             userRepository.save(user);
             authorityRepository.save(authority);
@@ -73,5 +66,22 @@ public class AccountService implements IAccountService {
             //delete from tokens
             verificationTokenRepository.deleteToken(token);
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(String userName){
+
+        //delete token
+        persistentLoginRepository.deleteByUsername(userName);
+
+        //delete userdetails
+        userDetailRepository.deleteById(userName);
+
+        //delete authorities
+        authorityRepository.deleteByUser_Username(userName);
+
+        //delete user
+        userRepository.deleteById(userName);
     }
 }

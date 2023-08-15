@@ -10,4 +10,6 @@ public interface IAccountService {
     void createVerificationToken(UserDetail account, String token);
 
     void confirmAccount(String token);
+
+    public void deleteUser(String userName);
 }

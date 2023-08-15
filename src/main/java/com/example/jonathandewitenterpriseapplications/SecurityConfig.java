@@ -43,20 +43,6 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
         return manager;
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password(passwordEncoder().encode("password"))
-//                .roles("USER")
-//                .build();
-
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("adminpassword")) // Use a different password for the admin
-//                .roles("USER", "ADMIN")
-//                .build();
-
-//        return new InMemoryUserDetailsManager(user, admin);
-
     }
 
     @Bean
@@ -65,21 +51,26 @@ public class SecurityConfig {
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeRequests()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/anonymous*").anonymous()
-                .antMatchers("/login*").permitAll()
-                .antMatchers("/account*").permitAll()
-                .antMatchers("/password*").permitAll()
+                .antMatchers("/home*").permitAll()
+                .antMatchers("/products*").permitAll()
+                .antMatchers("/about*").permitAll()
+                .antMatchers("/account/login*").permitAll()
+                .antMatchers("/account/perform_login*").permitAll()
+                .antMatchers("/account/regist*").permitAll()
+                .antMatchers("/account/perform_login*").permitAll()
+                .antMatchers("/account/accountConfirm*").permitAll()
                 .antMatchers("/assets/css/**", "assets/js/**", "/images/**").permitAll()
                 .antMatchers("/index*").permitAll()
-//                .anyRequest().authenticated()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated()
 
                 .and()
                 .formLogin()
                 .loginPage("/account/login")
                 .loginProcessingUrl("/account/perform_login")
-                .failureUrl("/login?error=true")
+                .failureUrl("/account/login?error=true")
                 .permitAll()
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/home", true)
 
                 .and().rememberMe()
                 .key("supperSecretKey")
@@ -88,11 +79,11 @@ public class SecurityConfig {
 
                 .and()
                 .logout()
-                .logoutSuccessUrl("/login?logout=true")
+                .logoutSuccessUrl("/account/login?logout=true")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout", "GET"))
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-
+                .permitAll()
         ;
         return http.build();
     }

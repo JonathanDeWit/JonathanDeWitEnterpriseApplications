@@ -37,7 +37,7 @@ public class AccountListener implements ApplicationListener<OnCreteAccountEvent>
         //get email properties
         String recipientAddress = userDetail.getEmail();
         String subject = "Account Confirmation";
-        String confirmationUrl = event.getAppUrl() + "/account/accountConfirm?token=" + token;
+        String confirmationUrl = "account/accountConfirm?token=" + token;
         String message = "Please confirm your account by clicking on the link:";
         //send email
         SimpleMailMessage email = new SimpleMailMessage();

@@ -3,15 +3,28 @@
 <body>
 <div layout:fragment="content">
     <div class="container mt-5">
+
+<!--      <div th:if="${param.logout}">-->
+<!--        <div class="alert alert-success" role="alert">-->
+<!--          Logout was successful!-->
+<!--        </div>-->
+<!--      </div>-->
+
       <div class="row">
         <div class="col-md-6 offset-md-3">
           <div class="login-box">
             <h2 class="text-center">Login</h2>
+            <div th:if="${error}">
+              <p th:text="${error}"></p>
+            </div>
+            <div th:if="${message}">
+              <p th:text="${message}"></p>
+            </div>
             <p class="text-center">
               <span th:text="#{create_account_sugestion} + ' '"></span>
               <a th:text="#{here}" th:href="@{/account/regist}"></a>
             </p>
-            <form action="/account/perform_login" method="post" id="login">
+            <form th:action="@{/account/perform_login}" method="post" id="login">
               <div class="form-group">
                 <label for="username" th:text="#{username}"></label>
                 <input type="text" class="form-control" id="username" name="username" th:placeholder="#{suggest_name}">
@@ -20,16 +33,17 @@
                 <label for="password" th:text="#{password}">Password</label>
                 <input type="password" class="form-control" id="password" name="password"  th:placeholder="#{suggest_password}">
               </div>
+
+              <div class="form-group"><label> Remember Me: <input type="checkbox" name="remember-me"/> </label></div>
+
               <button type="submit" class="btn btn-primary btn-block">Login</button>
             </form>
+
+
           </div>
         </div>
       </div>
   </div>
 </div>
-
-
-
-
 </body>
 </html>

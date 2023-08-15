@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
     <div th:fragment="main_menu">
         <nav class="navbar navbar-expand-lg">
@@ -18,10 +18,19 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/about}">About</a>
                     </li>
+
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/about}">Test</a>
+                    </li>
+
                 </ul>
+
+
                 <div class="nav-icons">
-                    <a th:href="@{/account/login}"><i class="fas fa-user"></i></a>
-                    <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/account/login}"><i>Login</i></a>
+                    <a sec:authorize="isAuthenticated()" href="/perform_logout"><i>Logout</i></a>
+                    <a sec:authorize="isAuthenticated()" th:href="@{/account/profile}"><i class="fas fa-user"></i></a>
+                    <a sec:authorize="isAuthenticated()" href="#"><i class="fas fa-shopping-cart"></i></a>
                 </div>
             </div>
         </nav>
