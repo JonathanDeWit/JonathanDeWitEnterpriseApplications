@@ -3,6 +3,7 @@ package com.example.jonathandewitenterpriseapplications.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -33,8 +34,18 @@ public class Product {
     @Column(length = 255)
     private String img;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", fetch = FetchType.EAGER)
+    private Set<BasketItem> basketItems;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", fetch = FetchType.EAGER)
+    private Set<OrderItem> orderItems;
+
 
     public Product() {
+    }
+
+    public Product(int id) {
+        this.id = id;
     }
 
     public Product(String name, String description, BigDecimal price, String category, Integer stock, String img) {

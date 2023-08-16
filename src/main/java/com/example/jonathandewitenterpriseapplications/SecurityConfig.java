@@ -65,6 +65,8 @@ public class SecurityConfig {
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
 
+
+
                 .and()
                 .formLogin()
                 .loginPage("/account/login")

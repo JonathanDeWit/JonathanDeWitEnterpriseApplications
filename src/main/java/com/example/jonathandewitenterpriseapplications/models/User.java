@@ -1,10 +1,6 @@
 package com.example.jonathandewitenterpriseapplications.models;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +20,10 @@ public class User{
     private Set<Authority> authorities;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<UserCart> userCart;
+    private Set<BasketItem> basketItems;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)  // Using LAZY fetching for orders
+    private Set<Order> orders;
 
     public User() {
     }

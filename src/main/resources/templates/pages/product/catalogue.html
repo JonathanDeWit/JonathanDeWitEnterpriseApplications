@@ -37,16 +37,18 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${product.name}"></h5>
                         <p class="card-text" th:text="${#strings.length(product.description) > 100 ? #strings.substring(product.description, 0, 100) + '...' : product.description}"></p>
-                        <h6 th:text="${product.price}"></h6>
+                        <h6 th:text="${product.price} + '€'"></h6>
                         <a th:href="@{/products/product/{id}(id=${product.id})}" class="btn btn-primary">Product details</a>
                         <hr>
-                        <div class="form-group">
-                            <label for="quantity">Quantity:</label>
-                            <input type="number" class="form-control product-quantity" id="quantity" name="quantity" min="1" required>
-                        </div>
-                        <button class="btn btn-primary add-to-cart" th:text="#{add_cart}">Add to Cart</button>
 
-
+                        <form th:action="@{/basket/add}" method="post">
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input type="hidden" class="form-control product-quantity" id="product_id" name="product_id" th:value="${product.id}" min="1" required>
+                                <input type="number" class="form-control product-quantity" id="quantity" name="quantity" min="1" th:max="${product.stock}" required>
+                            </div>
+                            <button class="btn btn-primary add-to-cart" th:text="#{add_cart}">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -54,25 +56,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Listen for clicks on elements with the 'add-to-cart' class
-        document.querySelectorAll('.add-to-cart').forEach(function(button) {
-            button.addEventListener('click', function(e) {
-                // Prevent any default actions
-                e.preventDefault();
-
-                // Get the quantity for the product related to the clicked button
-                const quantityInput = e.target.closest('.card-body').querySelector('.product-quantity');
-                const quantity = quantityInput.value;
-
-                // Log to the console
-                console.log(`Product quantity: ${quantity}`);
-            });
-        });
-    });
-</script>
 
 </body>
 </html>

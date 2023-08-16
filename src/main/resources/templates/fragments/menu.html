@@ -26,7 +26,7 @@
                     <a sec:authorize="!isAuthenticated()" th:href="@{/account/login}"><i>Login</i></a>
                     <a sec:authorize="isAuthenticated()" href="/perform_logout"><i>Logout</i></a>
                     <a sec:authorize="isAuthenticated()" th:href="@{/account/profile}"><i class="fas fa-user"></i></a>
-                    <a sec:authorize="isAuthenticated()" href="#"><i class="fas fa-shopping-cart"></i></a>
+                    <a sec:authorize="isAuthenticated()" th:href="@{/basket/checkout}"><i class="fas fa-shopping-cart"></i></a>
                 </div>
             </div>
         </nav>

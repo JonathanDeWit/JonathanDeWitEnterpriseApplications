@@ -11,5 +11,5 @@ public interface IAccountService {
 
     void confirmAccount(String token);
 
-    public void deleteUser(String userName);
+    void deleteUser(String userName);
 }
