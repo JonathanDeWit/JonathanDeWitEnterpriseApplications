@@ -23,6 +23,9 @@ public class User{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Authority> authorities;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<UserCart> userCart;
+
     public User() {
     }
 

@@ -22,9 +22,9 @@ public class HomeController {
         return "pages/about";
     }
 
-    @GetMapping("/products")
-    public String getProducts() {
-        return "pages/products";
-    }
+//    @GetMapping("/products")
+//    public String getProducts() {
+//        return "pages/products";
+//    }
 
 }

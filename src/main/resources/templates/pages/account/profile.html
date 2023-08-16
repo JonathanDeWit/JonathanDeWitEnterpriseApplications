@@ -29,11 +29,7 @@
                   <label for="email">Email</label>
                   <input type="email" class="form-control" id="email" th:value="${userDetail.getEmail()}" readonly>
                 </div>
-
-
-
               </form>
-
               <form th:action="@{/account/delete}" method="post">
                 <button type="submit" class="btn btn-danger btn-block">Delete Account</button>
               </form>

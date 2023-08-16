@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/main_layout" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+
+<div layout:fragment="content">
+    <div class="container mt-5">
+
+
+        <form class="row g-3">
+            <div class="col-md-4">
+                <label for="minPrice" class="form-label">Minimum Price</label>
+                <input type="number" class="form-control" id="minPrice" name="minPrice">
+            </div>
+            <div class="col-md-4">
+                <label for="maxPrice" class="form-label">Maximum Price</label>
+                <input type="number" class="form-control" id="maxPrice" name="maxPrice">
+            </div>
+            <div class="col-md-4">
+                <label for="category" class="form-label">Product Category</label>
+                <select class="form-select" id="category" name="category">
+                    <option value="null" th:text="#{selectCategory}"></option>
+                    <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"></option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+
+        <hr class="border border-primary border-3 opacity-75">
+
+        <div class="row mt-4">
+            <!-- Product 1 -->
+            <div class="col-md-4" th:each="product : ${products}">
+                <div class="card">
+                    <img th:src="@{'/img/products/' + ${product.img}}" class="card-img-top" alt="Product 1 Image">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${product.name}"></h5>
+                        <p class="card-text" th:text="${#strings.length(product.description) > 100 ? #strings.substring(product.description, 0, 100) + '...' : product.description}"></p>
+                        <h6 th:text="${product.price}"></h6>
+                        <a th:href="@{/products/product/{id}(id=${product.id})}" class="btn btn-primary">Product details</a>
+                        <hr>
+                        <div class="form-group">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" class="form-control product-quantity" id="quantity" name="quantity" min="1" required>
+                        </div>
+                        <button class="btn btn-primary add-to-cart" th:text="#{add_cart}">Add to Cart</button>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Listen for clicks on elements with the 'add-to-cart' class
+        document.querySelectorAll('.add-to-cart').forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                // Prevent any default actions
+                e.preventDefault();
+
+                // Get the quantity for the product related to the clicked button
+                const quantityInput = e.target.closest('.card-body').querySelector('.product-quantity');
+                const quantity = quantityInput.value;
+
+                // Log to the console
+                console.log(`Product quantity: ${quantity}`);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
