@@ -8,16 +8,16 @@
     <table class="table">
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Total</th>
+        <th th:text="#{name}">Name</th>
+        <th th:text="#{price}">Price</th>
+        <th th:text="#{quantity}">Quantity</th>
+        <th th:text="#{total}">Total</th>
         <th></th>
       </tr>
       </thead>
       <tbody>
-      <div th:if="*{basket.size() < 1}" class="alert alert-primary" role="alert">
-        Your Basket is empty
+      <div th:if="*{basket.size() < 1}" th:text="#{empty_bascet}" class="alert alert-primary" role="alert">
+
       </div>
 
       <tr th:each="item : ${basket}">
@@ -28,16 +28,16 @@
         <td>
           <form th:action="@{/basket/delete}" method="post">
             <input type="hidden" id="product_id" name="product_id" th:value="${item.product.id}" required>
-            <button type="submit" class="btn btn-danger">Delete</button>
+            <button type="submit" class="btn btn-danger" th:text="#{delete_button}"></button>
           </form>
         </td>
       </tr>
       </tbody>
     </table>
-    <h4>Total: <span th:text="${totalPrice}"></span></h4>
+    <h4 th:text="#{total}+': '+${totalPrice}"></h4>
 
     <form th:action="@{/basket/confirm_purchase}" method="post">
-      <button type="submit" class="btn btn-primary">Confirm purchase</button>
+      <button type="submit" class="btn btn-primary" th:text="#{confirm_purchase}">Confirm purchase</button>
     </form>
   </div>
 

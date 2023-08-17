@@ -59,7 +59,8 @@
               <ul>
                 <!-- Iterate through order items -->
                 <li th:each="orderItem : ${order.orderItems}">
-                  <span th:text="${orderItem.product.name}"></span> x <span th:text="${orderItem.quantity}"></span>
+
+                  <a th:href="@{/products/product/{id}(id=${orderItem.product.id})}" th:text="${orderItem.product.name}"></a> x <span th:text="${orderItem.quantity}"></span>
                 </li>
               </ul>
             </td>

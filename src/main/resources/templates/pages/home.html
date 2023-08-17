@@ -3,7 +3,48 @@
 <body>
 
 <div layout:fragment="content">
-    <h1>Home</h1>
+    <div class="jumbotron jumbotron-fluid text-center">
+        <h1 class="display-4">Welcome to VentiStore</h1>
+        <p class="lead">Where the magic of air movement comes to life</p>
+    </div>
+
+    <!-- Product Categories -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img th:src="@{/img/airco.jpg}" class="card-img-top" alt="Airco">
+                    <div class="card-body">
+                        <a th:href="@{/products/catalogue(category='Airco')}" class="card-title" th:text="#{airco}"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img th:src="@{/img/ventilator.png}" class="card-img-top" alt="Ventilator">
+                    <div class="card-body">
+                        <a th:href="@{/products/catalogue(category='Ventilator')}" class="card-title" th:text="#{fans}"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img th:src="@{/img/koelbox.jpg}" class="card-img-top" alt="Koelbox">
+                    <div class="card-body">
+                        <a th:href="@{/products/catalogue(category='Koelbox')}" class="card-title" th:text="#{cool_boxes}"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img th:src="@{/img/koel_elementen.jpg}" class="card-img-top" alt="Cold Elements">
+                    <div class="card-body">
+                        <a th:href="@{/products/catalogue(category='Koelelementen')}" class="card-title" th:text="#{cooling_elements}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
