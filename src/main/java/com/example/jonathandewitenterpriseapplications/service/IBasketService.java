@@ -6,6 +6,8 @@ public interface IBasketService {
 
     void saveToBasket(UserDetails userDetails, int productId, int quantity);
 
-    void deleteFromBasket(long basketItemId);
+    void deleteFromBasket(int productId, String userName );
+
+    void confirmPurchase(UserDetails user);
 
 }

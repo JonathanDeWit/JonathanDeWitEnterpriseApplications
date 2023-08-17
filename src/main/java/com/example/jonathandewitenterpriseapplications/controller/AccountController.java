@@ -4,6 +4,7 @@ import com.example.jonathandewitenterpriseapplications.models.SecurityUser;
 import com.example.jonathandewitenterpriseapplications.models.TestObject;
 import com.example.jonathandewitenterpriseapplications.models.User;
 import com.example.jonathandewitenterpriseapplications.models.UserDetail;
+import com.example.jonathandewitenterpriseapplications.repository.IOrderRepository;
 import com.example.jonathandewitenterpriseapplications.repository.IUserDetailRepository;
 import com.example.jonathandewitenterpriseapplications.service.IAccountService;
 import com.example.jonathandewitenterpriseapplications.util.OnCreteAccountEvent;
@@ -32,10 +33,14 @@ public class AccountController {
     private IUserDetailRepository userDetailRepository;
 
     @Autowired
+    private IOrderRepository orderRepository;
+
+    @Autowired
     private PasswordEncoder encoder;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+
 
 
     @GetMapping("/login")
@@ -85,7 +90,12 @@ public class AccountController {
     public String showUserProfile(@AuthenticationPrincipal UserDetails currentUser, Model model) {
         UserDetail userDetail = userDetailRepository.findByUsername(currentUser.getUsername());
 
+
+        var name = "jonathanjojofil@gmail.com";
+        var orders = orderRepository.findByUserUsername(name);
+
         model.addAttribute("userDetail", userDetail);
+        model.addAttribute("orders", orders);
         return "pages/account/profile";
     }
 

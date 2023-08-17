@@ -3,41 +3,80 @@
 <body>
 <div layout:fragment="content">
   <div class="container">
-    <h1>Hello</h1>
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-6 offset-md-3">
           <div class="card">
-            <div class="card-header">
-              User Profile
+            <div class="card-header" th:text="#{userprofile}">
             </div>
             <div class="card-body">
               <form>
                 <div class="form-group">
-                  <label for="username">Username</label>
+                  <label for="username" th:text="#{username}"></label>
                   <input type="text" class="form-control" id="username" th:value="${userDetail.getUsername()}" readonly>
                 </div>
                 <div class="form-group">
-                  <label for="firstname">First Name</label>
+                  <label for="firstname" th:text="#{userprofile}"></label>
                   <input type="text" class="form-control" id="firstname" th:value="${userDetail.getFirstname()}" readonly>
                 </div>
                 <div class="form-group">
-                  <label for="lastname">Last Name</label>
+                  <label for="lastname" th:text="#{lastname}"></label>
                   <input type="text" class="form-control" id="lastname" th:value="${userDetail.getLastname()}" readonly>
                 </div>
                 <div class="form-group">
-                  <label for="email">Email</label>
+                  <label for="email" th:text="#{email}"></label>
                   <input type="email" class="form-control" id="email" th:value="${userDetail.getEmail()}" readonly>
                 </div>
               </form>
               <form th:action="@{/account/delete}" method="post">
-                <button type="submit" class="btn btn-danger btn-block">Delete Account</button>
+                <button type="submit" class="btn btn-danger btn-block" th:text="#{delete_account}"></button>
               </form>
             </div>
           </div>
         </div>
       </div>
+
+
+      <h1>User Orders</h1>
+      <table class="table">
+        <thead>
+        <tr>
+<!--          <th>Order ID</th>-->
+          <th th:text="#{order_date}"></th>
+          <th th:text="#{complete}"></th>
+          <th th:text="#{order_items}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:if="${orders != null and not #lists.isEmpty(orders)}">
+          <!-- Iterate through orders -->
+          <tr th:each="order : ${orders}">
+<!--            <td th:text="${order.id}"></td>-->
+            <td th:text="${order.orderDatetime}"></td>
+              <td th:text="${order.complete ? 'Yes' : 'No'}"></td>
+
+              <td>
+              <ul>
+                <!-- Iterate through order items -->
+                <li th:each="orderItem : ${order.orderItems}">
+                  <span th:text="${orderItem.product.name}"></span> x <span th:text="${orderItem.quantity}"></span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </th:block>
+        <!-- Display a message if there are no orders -->
+        <th:block th:unless="${orders != null and not #lists.isEmpty(orders)}">
+          <tr>
+            <td colspan="4" th:text="#{no_order_available}"></td>
+          </tr>
+        </th:block>
+        </tbody>
+      </table>
     </div>
+
+
+  </div>
   </div>
 </div>
 </body>

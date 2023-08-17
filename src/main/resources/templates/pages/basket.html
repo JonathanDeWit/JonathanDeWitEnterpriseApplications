@@ -27,7 +27,7 @@
         <td th:text="${item.product.price * item.quantity}"></td>
         <td>
           <form th:action="@{/basket/delete}" method="post">
-            <input type="hidden" id="basketItemId" name="basketItemId" th:value="${item.id}" required>
+            <input type="hidden" id="product_id" name="product_id" th:value="${item.product.id}" required>
             <button type="submit" class="btn btn-danger">Delete</button>
           </form>
         </td>
@@ -35,6 +35,10 @@
       </tbody>
     </table>
     <h4>Total: <span th:text="${totalPrice}"></span></h4>
+
+    <form th:action="@{/basket/confirm_purchase}" method="post">
+      <button type="submit" class="btn btn-primary">Confirm purchase</button>
+    </form>
   </div>
 
 

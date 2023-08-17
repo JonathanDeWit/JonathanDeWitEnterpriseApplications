@@ -54,12 +54,22 @@ public class BasketController {
 
 
     @PostMapping(value = "/delete")
-    public String deleteProduct(long basketItemId) {
+    public String deleteProduct(@AuthenticationPrincipal UserDetails currentUser, int product_id) {
 
-        basketService.deleteFromBasket(basketItemId);
+        basketService.deleteFromBasket(product_id, currentUser.getUsername());
 
         return "redirect:checkout";
     }
+
+    @PostMapping(value = "/confirm_purchase")
+    public String getConfirm_purchase(@AuthenticationPrincipal UserDetails currentUser) {
+
+        basketService.confirmPurchase(currentUser);
+
+        return "redirect:checkout";
+    }
+
+
 
 
 }
