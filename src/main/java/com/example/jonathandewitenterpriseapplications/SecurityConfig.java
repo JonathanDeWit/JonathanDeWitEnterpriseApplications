@@ -21,9 +21,9 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        securedEnabled = true,
-        jsr250Enabled = true
+        prePostEnabled = true, // Allows using @PreAuthorize and @PostAuthorize annotations
+        securedEnabled = true, // Allows using @Secured annotation
+        jsr250Enabled = true // Allows using @RolesAllowed annotation
 )
 public class SecurityConfig {
 
@@ -33,7 +33,7 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
-        // Configure AuthenticationProvider for database-based authentication
+        // Configure AuthenticationProvider for DB authentication
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(userDetailsService());
@@ -41,6 +41,7 @@ public class SecurityConfig {
     }
     @Bean
     public UserDetailsService userDetailsService() {
+        // Service to retrieve user details from the database
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
         return manager;
     }
@@ -48,9 +49,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // Register the authentication provider
                 .authenticationProvider(daoAuthenticationProvider())
+                // Configure authorization rules
                 .authorizeRequests()
-                //.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/home*").permitAll()
                 .antMatchers("/products/**").permitAll()
                 .antMatchers("/about*").permitAll()
@@ -63,11 +65,13 @@ public class SecurityConfig {
                 .antMatchers("/assets/css/**", "assets/js/**", "/img/**").permitAll()
                 .antMatchers("/index*").permitAll()
                 .antMatchers("/").permitAll()
+                // For any request except for the paths above its required to be authenticated.
                 .anyRequest().authenticated()
 
 
 
                 .and()
+                // Configuration for form-based login
                 .formLogin()
                 .loginPage("/account/login")
                 .loginProcessingUrl("/account/perform_login")
@@ -76,11 +80,13 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/home", true)
 
                 .and().rememberMe()
+                // Configuration for "remember me" feature
                 .key("supperSecretKey")
                 .tokenRepository(tokenRepository())
                 .userDetailsService(userDetailsService())
 
                 .and()
+                // Configuration for logout
                 .logout()
                 .logoutSuccessUrl("/account/login?logout=true")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout", "GET"))
@@ -93,6 +99,7 @@ public class SecurityConfig {
 
     @Bean
     public PersistentTokenRepository tokenRepository(){
+        // Persistent token repository for "remember me" feature
         JdbcTokenRepositoryImpl token = new JdbcTokenRepositoryImpl();
         token.setDataSource(dataSource);
         return token;
@@ -100,6 +107,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // Password encoder to hash passwords using BCrypt
         return new BCryptPasswordEncoder();
     }
 
