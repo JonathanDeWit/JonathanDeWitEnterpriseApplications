@@ -29,17 +29,17 @@ public class AccountListener implements ApplicationListener<OnCreteAccountEvent>
     }
 
     private void confirmCreateAccount(OnCreteAccountEvent event) {
-        //get the account
-        //create verification token
+        // Create verification token
         UserDetail userDetail = event.getUserDetail();
         String token = UUID.randomUUID().toString();
+        // Save verification token
         accountService.createVerificationToken(userDetail, token);
-        //get email properties
+        // make email properties
         String recipientAddress = userDetail.getEmail();
         String subject = "Account Confirmation";
         String confirmationUrl = "account/accountConfirm?token=" + token;
         String message = "Please confirm your account by clicking on the link:";
-        //send email
+        // Send email
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
@@ -47,6 +47,5 @@ public class AccountListener implements ApplicationListener<OnCreteAccountEvent>
         mailSender.send(email);
 
         System.out.println("Send mail complete");
-
     }
 }

@@ -15,16 +15,16 @@ public class OrderListener implements ApplicationListener<OnCreateOrderEvent> {
 
     @Override
     public void onApplicationEvent(OnCreateOrderEvent event) {
-        //get email properties
 
         User user = event.getUser();
         var orderItems = event.getOrderItems();
 
+        // Calculate the total price of the order
         double totalPrice = orderItems.stream()
                 .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
                 .sum();
 
-
+        // Set all email properties
         String recipientAddress = user.getUsername();
         String subject = "Ventistore Order";
         String message = "Than you for your order\nYour order includes:\n";
@@ -34,14 +34,16 @@ public class OrderListener implements ApplicationListener<OnCreateOrderEvent> {
         }
 
         message += "\n\nThe total price of the order is: "+totalPrice+"€";
-        //send email
+
+        // Making email
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message);
+
+        // Send mail
         mailSender.send(email);
 
         System.out.println("Send mail complete");
-
     }
 }

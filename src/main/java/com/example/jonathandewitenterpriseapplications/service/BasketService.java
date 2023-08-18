@@ -36,15 +36,20 @@ public class BasketService implements IBasketService {
     @Override
     public void saveToBasket(UserDetails currentUser, int productId, int quantity) {
 
+        // Load a potential basket item with the productId
         var scan = basketItemRepository.findByUserNameAndProductId(productId, currentUser.getUsername());
 
+        // Check if the basket item is found
         if (scan!=null){
-            quantity+=scan.getQuantity();
-            basketItemRepository.deleteByBasketId(scan.getId());
+            // update the quantity of the basket item
+            scan.setQuantity(scan.getQuantity()+quantity);
+            basketItemRepository.save(scan);
         }
-
-        BasketItem basketItem = new BasketItem(new User(currentUser.getUsername(), currentUser.getPassword(), currentUser.isEnabled()), new Product(productId), quantity);
-        basketItemRepository.save(basketItem);
+        else{
+            // Save a new basket item
+            BasketItem basketItem = new BasketItem(new User(currentUser.getUsername(), currentUser.getPassword(), currentUser.isEnabled()), new Product(productId), quantity);
+            basketItemRepository.save(basketItem);
+        }
     }
 
     @Override
@@ -57,26 +62,46 @@ public class BasketService implements IBasketService {
     @Modifying
     @Transactional
     public void confirmPurchase(UserDetails userDetails) {
+
+        // Load all user basket items
         var basketItems = basketItemRepository.findByUserUsername(userDetails.getUsername());
+
         var user = new User(userDetails.getUsername(), userDetails.getPassword(), userDetails.isEnabled());
 
+        // Make and save new order
         var order = new Order(user, LocalDateTime.now(), false);
         order= orderRepository.save(order);
 
-
+        // Make an Order Item for every basket item
         ArrayList<OrderItem> orderItems = new ArrayList<>();
         for (var item: basketItems) {
             orderItems.add(new OrderItem(user, item.getProduct(), order, item.getQuantity()));
         }
+        // Save the order items
         orderItemRepository.saveAll(orderItems);
 
+        // Select all the basketItemsIds
         var basketIds = basketItems.stream()
                 .map(BasketItem::getId)
                 .collect(Collectors.toList());
+        // Delete all the corresponding basket items
         basketItemRepository.deleteByBasketIds(basketIds);
 
-        //send Email
+        // Send order confirmation e-mail
         eventPublisher.publishEvent(new OnCreateOrderEvent(user, orderItems));
+    }
+
+    @Override
+    public void deleteUserBasketAndOrder(String userName) {
+
+        // Delete user basket
+        basketItemRepository.deleteByUserUsername(userName);
+
+        // Delete user order items
+        orderItemRepository.deleteByUserUsername(userName);
+
+        // Delete user order
+        orderRepository.deleteByUserUsername(userName);
     }
 
 

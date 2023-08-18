@@ -1,6 +1,9 @@
 package com.example.jonathandewitenterpriseapplications.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user_details")
@@ -11,15 +14,21 @@ public class UserDetail {
     private String username;
 
     @Column(length = 50)
+    @NotBlank(message = "First name is required")
     private String firstname;
 
     @Column(length = 50)
+    @NotBlank(message = "Last name is required")
     private String lastname;
 
     @Column(name = "email", nullable = false, length = 100)
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
     private String email;
 
     @Column(name = "password", nullable = false, length = 100)
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password should be at least 6 characters long")
     private String password;
 
     @Transient

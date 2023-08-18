@@ -16,6 +16,9 @@ import java.util.List;
 public class AccountService implements IAccountService {
 
     @Autowired
+    private IBasketService basketService;
+
+    @Autowired
     private IUserRepository userRepository;
 
     @Autowired
@@ -31,9 +34,6 @@ public class AccountService implements IAccountService {
     private IVerificationTokenRepository verificationTokenRepository;
 
 
-
-
-
     @Override
     public UserDetail create(UserDetail userDetail) {
         return userDetailRepository.save(userDetail);
@@ -41,6 +41,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public void createVerificationToken(UserDetail user, String token) {
+        // Create and save new verification token
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUsername(user.getUsername());
@@ -50,20 +51,26 @@ public class AccountService implements IAccountService {
 
     @Override
     public void confirmAccount(String token) {
-        //retrieve token
+        // Retrieve token
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
-        //verify date
+        // Verify token date
         if(verificationToken.getExpiryDate().after(new Date())) {
-            //move from account table to userdetails table
+            // Load user detail
             UserDetail userDetail = userDetailRepository.findByUsername(verificationToken.getUsername());
 
+            // Make new user
             User user = new User(userDetail.getUsername(), userDetail.getPassword(), true);
+
+            // Make new authority for the user
             Authority authority = new Authority("ROLE_USER", user);
 
+            // Save user
             userRepository.save(user);
+
+            //Save authority
             authorityRepository.save(authority);
 
-            //delete from tokens
+            // Delete from verification token
             verificationTokenRepository.deleteToken(token);
         }
     }
@@ -71,6 +78,9 @@ public class AccountService implements IAccountService {
     @Override
     @Transactional
     public void deleteUser(String userName){
+
+        //Delete Basket
+        basketService.deleteUserBasketAndOrder(userName);
 
         //delete token
         persistentLoginRepository.deleteByUsername(userName);

@@ -21,10 +21,4 @@ public class HomeController {
     public String getAbout() {
         return "pages/about";
     }
-
-//    @GetMapping("/products")
-//    public String getProducts() {
-//        return "pages/products";
-//    }
-
 }

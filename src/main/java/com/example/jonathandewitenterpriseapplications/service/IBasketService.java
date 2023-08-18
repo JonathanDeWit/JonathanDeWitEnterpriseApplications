@@ -10,4 +10,6 @@ public interface IBasketService {
 
     void confirmPurchase(UserDetails user);
 
+    void deleteUserBasketAndOrder(String userName);
+
 }

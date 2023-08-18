@@ -28,15 +28,14 @@ public class ProductController {
                               @RequestParam(value = "minPrice", defaultValue = "0") BigDecimal minPrice,
                               @RequestParam(value = "category", defaultValue = "null") String category, Model model) {
 
-
+        // Load all different categories type
         List<String> categories = productRepository.findDistinctCategories();
-        var productFilter = customProductRepository.findByPriceAndCategory(maxPrice, minPrice, category);
 
-        var products = productRepository.findAll();
+        // Load all the products matching the potential filters
+        var productFilter = customProductRepository.findByPriceAndCategory(maxPrice, minPrice, category);
 
         model.addAttribute("products", productFilter);
         model.addAttribute("categories", categories);
-
 
         return "pages/product/catalogue";
     }
@@ -45,6 +44,7 @@ public class ProductController {
     @GetMapping("product/{id}")
     public String getProduct(@PathVariable(value = "id") int id, Model model) {
 
+        // Load a specific product
         var product = productRepository.findById(id);
 
         model.addAttribute("product", product.get());

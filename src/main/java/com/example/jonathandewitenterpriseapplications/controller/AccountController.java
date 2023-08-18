@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.Registration;
 import javax.validation.Valid;
@@ -45,35 +46,64 @@ public class AccountController {
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
+        // Check for any authentication error messages
         if (error != null)
             model.addAttribute("error", "Your username and password are invalid.");
 
+        // Check if user has been logged out
         if (logout != null)
             model.addAttribute("message", "You have been logged out successfully.");
+
+        // Confirmation message after account registration
+        if (model.containsAttribute("confirmationMessage")) {
+            model.addAttribute("confirmationMessage", model.getAttribute("confirmationMessage"));
+        }
 
         return "pages/account/login";
     }
 
+    // User registration
     @GetMapping(value = "/regist")
     public String getRegistration(Model model) {
         model.addAttribute("userDetail", new UserDetail());
+
+        // Check for any error messages from the POST registration method
+        if (model.containsAttribute("errorMessage")) {
+            model.addAttribute("errorMessage", model.getAttribute("errorMessage"));
+        }
+
         return "pages/account/regist";
     }
 
     @PostMapping(value = "/regist")
     public String addRegistration(
             @Valid UserDetail account,
-            BindingResult result) {
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
 
-        System.out.println("Test");
-        //encrypt password
+        // Check for validation errors
+        if (result.hasErrors()) {
+            return "redirect:regist";
+        }
+
+        // Confirm that password and confirm password fields match
+        if (!account.getPassword().equals(account.getConfirmPassword())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Password field and confirm password should have the same value");
+
+            return "redirect:regist";
+        }
+
+        // Encrypt password
         account.setPassword(encoder.encode(account.getPassword()));
 
-        //create the account
+        // Create the account
         account = accountService.create(account);
 
-        //fire off an event on creation
+        // Fire create account event
         eventPublisher.publishEvent(new OnCreteAccountEvent(account));
+
+        // Provide user with a message to check their email
+        redirectAttributes.addFlashAttribute("confirmationMessage", "Please check your email to confirm your registration.");
 
         return "redirect:login";
     }
@@ -88,11 +118,12 @@ public class AccountController {
 
     @GetMapping("/profile")
     public String showUserProfile(@AuthenticationPrincipal UserDetails currentUser, Model model) {
+
+        // Load user details
         UserDetail userDetail = userDetailRepository.findByUsername(currentUser.getUsername());
 
-
-        var name = "jonathanjojofil@gmail.com";
-        var orders = orderRepository.findByUserUsername(name);
+        // Load user orders
+        var orders = orderRepository.findByUserUsername(currentUser.getUsername());
 
         model.addAttribute("userDetail", userDetail);
         model.addAttribute("orders", orders);
@@ -102,6 +133,7 @@ public class AccountController {
     @PostMapping(value = "/delete")
     public String deleteUser(@AuthenticationPrincipal UserDetails currentUser) {
 
+        // Delete user
         accountService.deleteUser(currentUser.getUsername());
         return "redirect:/perform_logout";
     }

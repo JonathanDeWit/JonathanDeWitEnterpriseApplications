@@ -13,6 +13,11 @@ public interface IBasketItemRepository extends CrudRepository<BasketItem, Long> 
 
     List<BasketItem> findByUserUsername(String Username);
 
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM BasketItem b WHERE b.user.username = :username")
+    void deleteByUserUsername(@Param("username") String Username);
+
     @Query("SELECT b FROM BasketItem b WHERE b.product.id = :productId and b.user.username = :username")
     BasketItem findByUserNameAndProductId(@Param("productId") int productId, @Param("username") String username);
 
@@ -30,6 +35,4 @@ public interface IBasketItemRepository extends CrudRepository<BasketItem, Long> 
     @Transactional
     @Query("DELETE FROM BasketItem b WHERE b.id IN :basketIds")
     void deleteByBasketIds(List<Long> basketIds);
-
-
 }

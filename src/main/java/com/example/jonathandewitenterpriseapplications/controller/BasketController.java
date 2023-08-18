@@ -33,7 +33,10 @@ public class BasketController {
     @GetMapping(value = "/checkout")
     public String getBasket(@AuthenticationPrincipal UserDetails currentUser, Model model) {
 
+        // Load current user Basket Items
         var basket = basketItemRepository.findByUserUsername(currentUser.getUsername());
+
+        // Calculate the total price of the items in the basket
         double totalPrice = basket.stream()
                 .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
                 .sum();
@@ -47,6 +50,7 @@ public class BasketController {
     @PostMapping(value = "/add")
     public String addProduct(@AuthenticationPrincipal UserDetails currentUser, int product_id, int quantity) {
 
+        // Add the product to the user basket
         basketService.saveToBasket(currentUser, product_id, quantity);
 
         return "redirect:/products/catalogue";
@@ -56,6 +60,7 @@ public class BasketController {
     @PostMapping(value = "/delete")
     public String deleteProduct(@AuthenticationPrincipal UserDetails currentUser, int product_id) {
 
+        // Delete product from the user basket
         basketService.deleteFromBasket(product_id, currentUser.getUsername());
 
         return "redirect:checkout";
@@ -64,6 +69,7 @@ public class BasketController {
     @PostMapping(value = "/confirm_purchase")
     public String getConfirm_purchase(@AuthenticationPrincipal UserDetails currentUser) {
 
+        // Transform basket into an order and save it
         basketService.confirmPurchase(currentUser);
 
         return "redirect:checkout";
