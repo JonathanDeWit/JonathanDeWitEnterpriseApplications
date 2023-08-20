@@ -8,11 +8,11 @@
 
         <form class="row g-3">
             <!-- Product Search -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="productName" class="form-label">Product Name</label>
                 <input type="text" class="form-control" id="productName" name="productName" placeholder="Search product...">
             </div>
-            
+
             <div class="col-md-4">
                 <label for="minPrice" class="form-label">Minimum Price</label>
                 <input type="number" class="form-control" id="minPrice" name="minPrice">
@@ -28,6 +28,20 @@
                     <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"></option>
                 </select>
             </div>
+
+            <!-- Sort By -->
+            <div class="col-md-4">
+                <label for="sortBy" class="form-label">Sort By</label>
+                <select class="form-select" id="sortBy" name="sortBy">
+                    <option value="null">Default sorting</option>
+                    <option value="priceAsc">Price: Low to High</option>
+                    <option value="priceDesc">Price: High to Low</option>
+                    <option value="alphaAsc">Alphabetic Order: A-Z</option>
+                    <option value="alphaDesc">Alphabetic Order: Z-A</option>
+                    <option value="category">Category</option>
+                </select>
+            </div>
+
             <div class="col-12">
                 <button type="submit" class="btn btn-primary" th:text="#{filter}"></button>
             </div>

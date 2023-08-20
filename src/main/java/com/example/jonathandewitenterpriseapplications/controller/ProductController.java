@@ -28,13 +28,14 @@ public class ProductController {
                               @RequestParam(value = "minPrice", defaultValue = "0") BigDecimal minPrice,
                               @RequestParam(value = "category", defaultValue = "null") String category,
                               @RequestParam(value = "productName", defaultValue = "null") String productName,
+                              @RequestParam(value = "sortBy", defaultValue = "null") String sortBy,
                               Model model) {
 
         // Load all different categories type
         List<String> categories = productRepository.findDistinctCategories();
 
         // Load all the products matching the potential filters
-        var productFilter = customProductRepository.findByPriceAndCategory(maxPrice, minPrice, category, productName);
+        var productFilter = customProductRepository.findByFilter(maxPrice, minPrice, category, productName, sortBy);
 
         model.addAttribute("products", productFilter);
         model.addAttribute("categories", categories);

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Repository
@@ -20,7 +21,7 @@ public class CustomProductRepository implements ICustomProductRepository {
     private DataSource dataSource;
 
     @Override
-    public Iterable<Product> findByPriceAndCategory(BigDecimal maxPrice, BigDecimal minPrice, String category, String productName) {
+    public Iterable<Product> findByFilter(BigDecimal maxPrice, BigDecimal minPrice, String category, String productName, String sortBy) {
         JdbcTemplate template = new JdbcTemplate(dataSource);
 
         String sql = "select id, name, description, price, category, stock, img FROM products WHERE price BETWEEN ? AND ? ";
@@ -56,6 +57,24 @@ public class CustomProductRepository implements ICustomProductRepository {
                     return product;
                 }
         );
+
+        switch (sortBy){
+            case "priceAsc":
+                products.sort(Comparator.comparing(Product::getPrice));
+                break;
+            case "priceDesc":
+                products.sort(Comparator.comparing(Product::getPrice).reversed());
+                break;
+            case "alphaAsc":
+                products.sort(Comparator.comparing(Product::getName));
+                break;
+            case "alphaDesc":
+                products.sort(Comparator.comparing(Product::getName).reversed());
+                break;
+            case "category":
+                products.sort(Comparator.comparing(Product::getCategory));
+                break;
+        }
 
         return products;
     }
