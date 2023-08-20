@@ -26,13 +26,15 @@ public class ProductController {
     @GetMapping("catalogue")
     public String getProducts(@RequestParam(value = "maxPrice", defaultValue = "100000") BigDecimal maxPrice,
                               @RequestParam(value = "minPrice", defaultValue = "0") BigDecimal minPrice,
-                              @RequestParam(value = "category", defaultValue = "null") String category, Model model) {
+                              @RequestParam(value = "category", defaultValue = "null") String category,
+                              @RequestParam(value = "productName", defaultValue = "null") String productName,
+                              Model model) {
 
         // Load all different categories type
         List<String> categories = productRepository.findDistinctCategories();
 
         // Load all the products matching the potential filters
-        var productFilter = customProductRepository.findByPriceAndCategory(maxPrice, minPrice, category);
+        var productFilter = customProductRepository.findByPriceAndCategory(maxPrice, minPrice, category, productName);
 
         model.addAttribute("products", productFilter);
         model.addAttribute("categories", categories);

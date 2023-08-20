@@ -20,7 +20,7 @@ public class CustomProductRepository implements ICustomProductRepository {
     private DataSource dataSource;
 
     @Override
-    public Iterable<Product> findByPriceAndCategory(BigDecimal maxPrice, BigDecimal minPrice, String category) {
+    public Iterable<Product> findByPriceAndCategory(BigDecimal maxPrice, BigDecimal minPrice, String category, String productName) {
         JdbcTemplate template = new JdbcTemplate(dataSource);
 
         String sql = "select id, name, description, price, category, stock, img FROM products WHERE price BETWEEN ? AND ? ";
@@ -34,6 +34,11 @@ public class CustomProductRepository implements ICustomProductRepository {
         if (!category.equals("null")){
             sql += "AND category LIKE ?";
             param.add("%" + category + "%");
+        }
+
+        if (!productName.equals("null") && !productName.isBlank()){
+            sql += "AND name LIKE ?";
+            param.add("%" + productName + "%");
         }
 
         sql += ";";
