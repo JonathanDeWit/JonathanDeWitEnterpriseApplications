@@ -130,6 +130,26 @@ public class AccountController {
         return "pages/account/profile";
     }
 
+    @PostMapping("/update")
+    public String updateProfile(
+            @AuthenticationPrincipal UserDetails currentUser,
+            @RequestParam("firstname") String firstname,
+            @RequestParam("lastname") String lastname,
+            Model model) {
+
+        // Load the user's details
+        UserDetail userDetail = userDetailRepository.findByUsername(currentUser.getUsername());
+
+        // Update the user's firstname and lastname
+        userDetail.setFirstname(firstname);
+        userDetail.setLastname(lastname);
+
+        // Save the updated user details
+        userDetailRepository.save(userDetail);
+
+        return "redirect:/account/profile";
+    }
+
     @PostMapping(value = "/delete")
     public String deleteUser(@AuthenticationPrincipal UserDetails currentUser) {
 

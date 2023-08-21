@@ -1,40 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/main_layout" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <script>
+        function toggleEdit() {
+            // Toggle readonly attribute for specific fields (firstname and lastname)
+            let firstnameInput = document.getElementById('firstname');
+            let lastnameInput = document.getElementById('lastname');
+
+            if (firstnameInput.hasAttribute('readonly')) {
+                firstnameInput.removeAttribute('readonly');
+                lastnameInput.removeAttribute('readonly');
+            } else {
+                firstnameInput.setAttribute('readonly', '');
+                lastnameInput.setAttribute('readonly', '');
+            }
+
+            // Toggle visibility of the buttons
+            let editBtn = document.getElementById('editBtn');
+            let saveBtn = document.getElementById('saveBtn');
+
+            if (editBtn.style.display === 'none') {
+                editBtn.style.display = 'block';
+                saveBtn.style.display = 'none';
+            } else {
+                editBtn.style.display = 'none';
+                saveBtn.style.display = 'block';
+            }
+        }
+    </script>
+</head>
 <body>
 <div layout:fragment="content">
   <div class="container">
     <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-6 offset-md-3">
-          <div class="card">
-            <div class="card-header" th:text="#{userprofile}">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header" th:text="#{userprofile}"></div>
+                    <div class="card-body">
+                        <form id="profileForm" th:action="@{/account/update}" method="post">
+                            <div class="form-group">
+                                <label for="username" th:text="#{username}"></label>
+                                <input type="text" class="form-control" id="username" th:value="${userDetail.getUsername()}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="firstname" th:text="#{userprofile}"></label>
+                                <input type="text" class="form-control" id="firstname" name="firstname" th:value="${userDetail.getFirstname()}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname" th:text="#{lastname}"></label>
+                                <input type="text" class="form-control" id="lastname" name="lastname" th:value="${userDetail.getLastname()}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" th:text="#{email}"></label>
+                                <input type="email" class="form-control" id="email" th:value="${userDetail.getEmail()}" readonly>
+                            </div>
+                            <button type="button" id="editBtn" class="btn btn-primary" onclick="toggleEdit()">Edit</button>
+                            <button type="submit" id="saveBtn" class="btn btn-success" style="display:none;">Save</button>
+                        </form>
+                        <form th:action="@{/account/delete}" method="post">
+                            <button type="submit" class="btn btn-danger btn-block" th:text="#{delete_account}"></button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-              <form>
-                <div class="form-group">
-                  <label for="username" th:text="#{username}"></label>
-                  <input type="text" class="form-control" id="username" th:value="${userDetail.getUsername()}" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="firstname" th:text="#{userprofile}"></label>
-                  <input type="text" class="form-control" id="firstname" th:value="${userDetail.getFirstname()}" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="lastname" th:text="#{lastname}"></label>
-                  <input type="text" class="form-control" id="lastname" th:value="${userDetail.getLastname()}" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="email" th:text="#{email}"></label>
-                  <input type="email" class="form-control" id="email" th:value="${userDetail.getEmail()}" readonly>
-                </div>
-              </form>
-              <form th:action="@{/account/delete}" method="post">
-                <button type="submit" class="btn btn-danger btn-block" th:text="#{delete_account}"></button>
-              </form>
-            </div>
-          </div>
         </div>
-      </div>
 
 
       <h1>User Orders</h1>
