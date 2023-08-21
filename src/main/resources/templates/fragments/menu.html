@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
     <div th:fragment="main_menu">
         <nav class="navbar navbar-expand-lg">
@@ -10,21 +10,21 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/home}">Home</a>
+                        <a class="nav-link" th:href="@{/home}" th:text="#{home}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/products/catalogue}">Products</a>
+                        <a class="nav-link" th:href="@{/products/catalogue}" th:text="#{products}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/about}">About</a>
+                        <a class="nav-link" th:href="@{/about}" th:text="#{about}"></a>
                     </li>
 
                 </ul>
 
 
                 <div class="nav-icons">
-                    <a sec:authorize="!isAuthenticated()" th:href="@{/account/login}"><i>Login</i></a>
-                    <a sec:authorize="isAuthenticated()" href="/perform_logout"><i>Logout</i></a>
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/account/login}"><i th:text="#{login}"></i></a>
+                    <a sec:authorize="isAuthenticated()" href="/perform_logout"><i th:text="#{logout}"></i></a>
                     <a sec:authorize="isAuthenticated()" th:href="@{/account/profile}"><i class="fas fa-user"></i></a>
                     <a sec:authorize="isAuthenticated()" th:href="@{/basket/checkout}"><i class="fas fa-shopping-cart"></i></a>
                 </div>

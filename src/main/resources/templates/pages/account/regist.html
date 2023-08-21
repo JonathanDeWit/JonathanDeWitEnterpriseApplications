@@ -9,7 +9,7 @@
   <div class="container mt-5">
     <h2 th:text="#{registration}"></h2>
 
-    <div th:if="${errorMessage}" class="alert alert-info" role="alert">
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
       <p th:text="${errorMessage}"></p>
     </div>
 
